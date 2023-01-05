@@ -63,3 +63,43 @@ $string['rec'] = 'Rechnung'; // Invoice
 $string['cod'] = 'Nachname (DHL)'; // Cash on delivery
 $string['sb'] = 'Online-Überweisung'; // Online bank transfer
 $string['wlt'] = 'PayPal'; // e-Wallet
+
+$string['cart'] = 'Warenkorb';
+$string['cart-additional'] = '<h4>Fertig geshoppt?</h4><p>Auf die meisten Kurse kannst du direkt nach Abschluss des Zahlungsvorgangs unter „Zur Kasse“ zugreifen und so direkt mit dem Lernen starten. Für alle betreuten Kurse gib bitte unter „Zur Anfrage“ deine Daten ein. Du erhältst dann eine E-Mail mit dem Vertrag von uns, den du unterschrieben an uns zurück schickst. Im nächsten Schritt schicken wir dir eine Rechnung, die in monatlichen Raten beglichen werden muss. Wir schalten dich dann zur entsprechenden Kurslaufzeit für den Kurs frei!</p>';
+$string['cart-additional-products'] = '<h4>Fertig geshoppt?</h4><p>Super! Klicke einfach auf „Zur Kasse“,  gib deine Zahlungsdaten ein und schließe den Bestellvorgang ab. Im Anschluss erhältst du eine Bestätigungsmail und kannst direkt auf deinen gekauften Kurs zugreifen. Wir wünschen dir viel Spaß beim Lernen!</p>';
+$string['cart-additional-zfu'] = '<h4>Fertig geshoppt?</h4><p>Super! Klicke einfach auf „Zur Anfrage“ und gib deine Daten ein. Du erhältst dann eine E-Mail mit dem Vertrag, den du unterschrieben an uns zurück schickst. Im nächsten Schritt schicken wir dir eine Rechnung, die in monatlichen Raten beglichen werden muss. Wir schalten dich dann zur entsprechenden Kurslaufzeit für den Kurs frei!</p>';
+$string['inquiry'] = 'Anfrage';
+$string['product'] = 'Produkt';
+$string['price'] = 'Preis';
+$string['qty'] = 'Menge';
+$string['subtotal'] = 'Nettobetrag';
+$string['netto'] = 'Endpreis';
+$string['vat'] = 'inkl. {$a}% USt.';
+$string['total'] = 'Bruttobetrag';
+$string['continue-shopping'] = 'Weiter Einkaufen';
+$string['goto-checkout'] = 'Zur Kasse';
+$string['goto-inquiry'] = 'Zur Anfrage';
+$string['coupon'] = 'Rabatt-Code: ';
+$string['code'] = 'Code: ';
+$string['redeemed-coupon'] = '{$a->code} - {$a->discount} Rabatt';
+$string['graduation-price'] = 'Staffelpreis - {$a->discountValue}% Rabatt ab {$a->conditionValue} Stück.';
+$string['as-coupon'] = 'Ich möchte den Kurs für eine andere Person kaufen.';
+$string['as-coupon_help'] = 'Du möchtest diesen Kurs nicht für dich, sondern für eine andere Person kaufen? Dann klicke dieses Feld an.';
+$string['invalid-coupon-code'] = 'Ups, ein schwarzes Loch! Dieser Rabatt-Code existiert leider nicht. Bitte prüfe deine Eingabe oder wende dich an unseren Support.';
+$string['valid-coupon-code'] = 'Mission geschafft! Dein Rabatt-Code wurde erfolgreich eingelöst.';
+
+$string['salutation'] = 'Anrede';
+$string['zip'] = 'PLZ';
+$string['birthday'] = 'Geburtstag';
+$string['birth-city'] = 'Geburtsort';
+$string['company'] = 'Firma';
+$string['invoice'] = 'Abweichende Rechnungsinformationen';
+
+$string['send-requests'] = 'Inquiry/Free Access Anfragen an Moodalis';
+
+$string['free-access'] = 'Vielen Dank für deine Buchung bei oncampus. Du hast den 100%-Rabatt für diesen Kurs erfolgreich eingelöst. Du kannst gleich in den Kurs gehen oder noch weiter in unserem Angebot stöbern.';
+$string['thx'] = 'Vielen Dank für deine Buchung bei oncampus. Die Buchung hat funktioniert. Wir freuen uns, dass du in unserer World of Learning fündig geworden bist.  Du kannst gleich in den Kurs gehen oder noch weiter in unserem Angebot stöbern.';
+$string['thx-zfu'] = 'Vielen Dank für deine Anfrage bei oncampus. Deine Anfrage ist bei uns angekommen. Wir freuen uns, dass du in unserer World of Learning fündig geworden bist. Du erhältst in Kürze eine E-Mail mit dem Vertrag. Sollte die E-Mail nicht ankommen, checke bitte auch deinen Spam-Ordner. Schicke den Vertrag bitte unterschrieben an uns zurück. Danach steht deiner Teilnahme an den Kursen nichts mehr im Weg.';
+
+$string['vat_value'] = "USt.";
+$string['testuser'] = 'Testnutzer';

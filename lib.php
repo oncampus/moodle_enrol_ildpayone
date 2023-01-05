@@ -167,54 +167,87 @@ class enrol_ildpayone_plugin extends enrol_plugin {
      * @return string html text, usually a form in a text box
      */
     function enrol_page_hook(stdClass $instance) {
-        global $CFG, $USER, $OUTPUT, $PAGE, $DB;
+        global $CFG, $USER, $OUTPUT, $PAGE, $DB, $SESSION;
+        require_once($CFG->dirroot . '/enrol/ildpayone/locallib.php');
+        require_once($CFG->dirroot . '/enrol/ildpayone/classes/cart.php');
 
-        ob_start();
+        $PAGE->requires->js(new moodle_url($CFG->httpswwwroot . '/enrol/ildpayone/js/ildpayone.js'), false);
+        $PAGE->force_theme('ild_oncampus');
 
-        if ($DB->record_exists('user_enrolments', array('userid' => $USER->id, 'enrolid' => $instance->id))) {
-            return ob_get_clean();
+        $action = optional_param('action', '', PARAM_TEXT);
+        $productid = optional_param('product', '', PARAM_TEXT);
+        $coupon = optional_param('coupon', '', PARAM_TEXT);
+        $qty = optional_param('qty', '', PARAM_INT);
+        $ascoupon = optional_param('ascoupon', '', PARAM_TEXT);
+
+        $ocproduct = $DB->get_record('block_ocproducts', array('course' => $instance->courseid));
+        $cart = new \ildpayone\cart\Cart();
+
+        switch ($action) {
+            case 'add':
+                $cart->add(new \ildpayone\cart\Product($ocproduct, $instance->id));
+
+                redirect($CFG->wwwroot . '/enrol/?id=' . $instance->courseid);
+                break;
+
+            case 'ascoupon':
+                $cart->set_ascoupons($ascoupon);
+                redirect($CFG->wwwroot . '/enrol/?id=' . $instance->courseid);
+                break;
+
+            case 'incr':
+            case 'decr':
+            case 'update':
+                $cart->update($productid, $action, $qty);
+                redirect($CFG->wwwroot . '/enrol/?id=' . $instance->courseid);
+                break;
+
+            case 'remove':
+                $cart->delete($productid);
+
+                if ($cart->is_empty()) {
+                    redirect($CFG->wwwroot);
+                } else {
+                    redirect($CFG->wwwroot . '/enrol/?id=' . $cart->get_enrolid());
+                }
+                break;
+
+            case 'checkout':
+                if (isguestuser()) {
+                    redirect(get_login_url());
+                } else if (!$cart->is_empty() && (($cart->get_total() - $cart->get_discount()->discountValue) <= 0)) {
+                    $hash_string = $USER->id . $cart->get_id();
+                    $hash = hash_hmac("sha384", $hash_string, get_config('enrol_ildpayone', 'portalkey'));
+
+                    ildpayone_create_free_access_invoice();
+                    redirect($CFG->wwwroot . '/enrol/ildpayone/success.php?user=' . $USER->id . '&hash=' . $hash);
+                } else {
+                    return $OUTPUT->box($cart->checkout());
+                }
+                break;
+
+            case 'coupon':
+                if (isset($coupon) && !empty($coupon)) {
+                    $coupon_found = $cart->redeem_coupon($coupon);
+
+                    if (!$coupon_found) {
+                        redirect($CFG->wwwroot . '/enrol/?id=' . $instance->courseid, get_string('invalid-coupon-code',
+                            'enrol_ildpayone'), null, \core\output\notification::NOTIFY_ERROR);
+                    } else {
+                        redirect($CFG->wwwroot . '/enrol/?id=' . $instance->courseid, get_string('valid-coupon-code',
+                            'enrol_ildpayone'), null, \core\output\notification::NOTIFY_INFO);
+                    }
+                }
+                break;
+
+            default:
+                if ($cart->is_empty() || !$cart->has_product($ocproduct->product)) {
+                    redirect($CFG->wwwroot . '/blocks/ocproducts/product.php?id=' . $ocproduct->product);
+                }
+                break;
         }
 
-        if ($instance->enrolstartdate != 0 && $instance->enrolstartdate > time()) {
-            return ob_get_clean();
-        }
-
-        if ($instance->enrolenddate != 0 && $instance->enrolenddate < time()) {
-            return ob_get_clean();
-        }
-
-        $course = $DB->get_record('course', array('id' => $instance->courseid));
-
-        if ((float)$instance->cost <= 0) {
-            $cost = 0;
-        } else {
-            $cost = (float)$instance->cost;
-        }
-
-        if (abs($cost) < 0.01) { // no cost, other enrolment methods (instances) should be used
-            echo '<p>' . get_string('nocost', 'enrol_ildpayone') . '</p>';
-        } else {
-            $localisedcost = format_float($cost, 2, true);
-
-            if (isguestuser()) {
-                echo '<div class="mdl-align"><p>' . get_string('paymentrequired') . '</p>';
-                echo '<p><b>' . get_string('cost') . ": $instance->currency $localisedcost" . '</b></p>';
-                echo '<p><a href="' . $CFG->httpswwwroot . '/login/">' . get_string('loginsite') . '</a></p>';
-                echo '</div>';
-            } else {
-                require_once($CFG->dirroot . '/enrol/ildpayone/locallib.php');
-
-                $payments = ildpayone_prepare_purchase($instance, $course);
-                $iframe_height = array('cc' => 1145, 'sb' => 1275, 'wlt' => 960);
-                $logos = array('cc' => '<span style="float:right"><img style="padding-right: 10px;" src="https://mooin.oncampus.de/enrol/ildpayone/logos/visa.png" alt="Visa"><img style="padding-right: 10px;" src="https://mooin.oncampus.de/enrol/ildpayone/logos/mc.png" alt="MasterCard"><img src="https://mooin.oncampus.de/enrol/ildpayone/logos/maestro.jpg" alt="Maestro"></span>',
-                    'sb' => '<span style="float:right"><img style="padding-right: 10px;" src="https://mooin.oncampus.de/enrol/ildpayone/logos/giropay.png" alt="Giropay"><img src="https://mooin.oncampus.de/enrol/ildpayone/logos/sofort.png" alt="Sofort Ueberweisung"></span>',
-                    'wlt' => '<span style="float:right"><img src="https://mooin.oncampus.de/enrol/ildpayone/logos/paypal.png" alt="PayPal"></span>');
-
-                include($CFG->dirroot . '/enrol/ildpayone/enrol.html');
-            }
-        }
-
-        return $OUTPUT->box(ob_get_clean(), array('id' => 'payment-box'));
+        return $OUTPUT->box($cart->show());
     }
 
     /**

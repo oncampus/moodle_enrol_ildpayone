@@ -35,8 +35,10 @@ class enrol_ildpayone_edit_form extends moodleform {
 
         list($instance, $plugin, $context) = $this->_customdata;
 
-        $courseinfo = $DB->get_record('local_ildcourseinfo', array('course' => $instance->courseid));
-        $data = json_decode($courseinfo->json);
+        $courseinfo = $DB->get_record('block_ocproducts', array('course' => $instance->courseid));
+        if ($courseinfo) {
+            $data = json_decode($courseinfo->json);
+        }
 
         $mform->addElement('header', 'header', get_string('pluginname', 'enrol_ildpayone'));
 
@@ -50,15 +52,18 @@ class enrol_ildpayone_edit_form extends moodleform {
 
         $mform->addElement('text', 'customint1', get_string('product_id', 'enrol_ildpayone'));
         $mform->setType('customint1', PARAM_INT);
-        $mform->setDefault('customint1', $data->attributes->offers[0]->productID);
+        $product_id = (isset($data)) ? $data->attributes->offers[0]->productID : '';
+        $mform->setDefault('customint1', $product_id);
 
         $mform->addElement('text', 'cost', get_string('cost', 'enrol_ildpayone'), array('size' => 4));
         $mform->setType('cost', PARAM_RAW); // Use unformat_float to get real value.
-        $mform->setDefault('cost', format_float($data->attributes->offers[0]->price, 2, true));
+        $cost = (isset($data)) ? format_float($data->attributes->offers[0]->price, 2, true) : '';
+        $mform->setDefault('cost', $cost);
 
         $payonecurrencies = $plugin->get_currencies();
         $mform->addElement('select', 'currency', get_string('currency', 'enrol_ildpayone'), $payonecurrencies);
-        $mform->setDefault('currency', $data->attributes->offers[0]->priceCurrency);
+        $currency = (isset($data)) ? $data->attributes->offers[0]->priceCurrency : '';
+        $mform->setDefault('currency', $currency);
 
         if ($instance->id) {
             $roles = get_default_enrol_roles($context, $instance->roleid);
@@ -68,7 +73,7 @@ class enrol_ildpayone_edit_form extends moodleform {
         $mform->addElement('select', 'roleid', get_string('assignrole', 'enrol_ildpayone'), $roles);
         $mform->setDefault('roleid', '5');
 
-        if (!empty($data->attributes->duration)) {
+        if (isset($data) && !empty($data->attributes->duration) && $data->attributes->duration != 'P') {
             $interval = new DateInterval($data->attributes->duration);
             $intervalInSeconds = new DateTime();
             $intervalInSeconds->setTimeStamp(0);

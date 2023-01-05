@@ -1,0 +1,140 @@
+<h2><?= get_string('cart', 'enrol_ildpayone')?></h2>
+
+
+<table class="cart table table-hover table-condensed">
+    <thead>
+    <tr>
+        <th style="width:40%"><?= get_string('product', 'enrol_ildpayone')?></th>
+        <th style="width:10%"><?= get_string('price', 'enrol_ildpayone')?></th>
+        <th style="width:18%"><?= get_string('qty', 'enrol_ildpayone')?></th>
+        <th style="width:22%" class="text-center"><?= get_string('netto', 'enrol_ildpayone')?></th>
+        <th style="width:10%"></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <?php foreach($products as $id => $product):?>
+    <tr>
+        <td data-th="<?= get_string('product', 'enrol_ildpayone')?>">
+            <div class="row">
+                <div class="col-sm-2 hidden-xs"><img src="<?= $product->get_thumbnail() ?>"
+                                                     alt="<?= $product->get_title() ?>"
+                                                     class="img-responsive"/></div>
+                <span class="col-sm-10">
+                        <a href="/blocks/ocproducts/product.php?id=<?= $id ?>"><h4 class="nomargin"><?= $product->
+                            get_title() ?></h4></a>
+                    <?php
+                        if($product->has_discount()) {
+                            $product_discount = $product->get_discount();
+                            echo '<span
+                        class="redeemed-code"><strong>' . get_string('code', 'enrol_ildpayone') . '</strong>' . get_string('redeemed-coupon', 'enrol_ildpayone', array('code' => $product_discount->code, 'discount' => $product_discount->discountValue . '%')) . '</span><br/>';
+                        }
+
+                        if($product->has_graduation_discount()) {
+                            $product_graduation_discount = $product->get_graduation_discount();
+                            echo '<span class="graduation-price"><strong>' . get_string('graduation-price', 'enrol_ildpayone', array('conditionValue' => $product_graduation_discount->discountConditions[0]->conditionValue, 'discountValue' => $product_graduation_discount->discountValue)) . '</strong></span>';
+                        }
+                    ?>
+                    </span>
+            </div>
+        </td>
+        <td data-th="<?= get_string('price', 'enrol_ildpayone')?>">EUR <?= number_format($product->get_original_price(), 2, ',', '.') ?></td>
+        <td data-th="<?= get_string('qty', 'enrol_ildpayone')?>">
+            <form action="/enrol/index.php" method="get">
+                <input type="hidden" name="id" value="<?= $product->get_courseid() ?>">
+                <input type="hidden" name="product" value="<?= $id ?>">
+                <input type="number" class="form-control text-center" value="<?= $product->get_quantity() ?>">
+                <button class="btn btn-info" name="action" value="incr" type="submit"><i class="fa fa-plus"
+                                                                                         aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-info" name="action" value="decr" type="submit"><i class="fa fa-minus"
+                                                                                         aria-hidden="true"></i>
+                </button>
+            </form>
+        </td>
+        <td data-th="<?= get_string('netto', 'enrol_ildpayone')?>" class="text-center">
+            <?php
+                    if($product->has_discount() || $product->has_graduation_discount()){
+            echo '<span class="old-price">EUR ' . number_format($product->get_original_price() * $product->get_quantity(), 2, ',', '.') . '</span>
+            <br/>';
+            echo '<span
+                class="new-price">EUR ' . number_format($product->get_price() * $product->get_quantity(), 2, ',', '.') . '</span>';
+            } else {
+            echo 'EUR ' . number_format($product->get_price() * $product->get_quantity(), 2, ',', '.');
+            }
+            ?>
+        </td>
+        <td class="actions" data-th="">
+            <form action="/enrol/index.php" method="get">
+                <input type="hidden" name="id" value="<?= $product->get_courseid() ?>">
+                <input type="hidden" name="product" value="<?= $id ?>">
+                <button class="btn btn-block" name="action" value="remove" type="submit"><i
+                        class="fa fa-trash"></i>
+                </button>
+            </form>
+        </td>
+    </tr>
+
+    <?php endforeach;?>
+
+    </tbody>
+    <tfoot>
+    <tr class="visible-xs">
+        <td class="text-center"><?= get_string('vat', 'enrol_ildpayone', get_config('enrol_ildpayone', 'vat'))?>: EUR <?= number_format($vat_rate, 2, ',', '.') ?></td>
+    </tr>
+    <tr class="visible-xs">
+        <td class="text-center"><strong>EUR <?= number_format($total, 2, ',', '.') ?></strong></td>
+    </tr>
+    <tr>
+        <td class="hidden-xs" colspan="5"></td>
+    </tr>
+    <tr class="hidden-xs">
+        <td colspan="2">
+            <?php
+                if(!empty($abs_discount)) {
+                echo '<span class="redeemed-code"><strong>' . get_string('code', 'enrol_ildpayone') . '</strong>' .
+            get_string('redeemed-coupon', 'enrol_ildpayone', array('code' => $abs_discount->code, 'discount' =>
+            $abs_discount->discountValue . 'EUR')) . '</span>';
+            }
+            ?>
+        </td>
+        <td class="text-right"><strong><?= get_string('total', 'enrol_ildpayone')?></strong></td>
+        <td class="text-center"><strong>EUR
+            <?php
+                if(!empty($abs_discount)) {
+                    echo '<span class="old-price">EUR ' . number_format($total, 2, ',', '.') . '</span>
+            <br/>';
+            echo '<span class="new-price">EUR ' . number_format($cart_total, 2, ',', '.')  . '</span>';
+            } else {
+            echo number_format($total, 2, ',', '.');
+            }
+            ?></strong></td>
+        <td></td>
+    </tr>
+    <tr class="hidden-xs">
+        <td colspan="2"></td>
+        <td class="text-right"><?= get_string('vat', 'enrol_ildpayone', get_config('enrol_ildpayone', 'vat'))?></td>
+        <td class="text-center">EUR <?= number_format($vat_rate, 2, ',', '.') ?></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <form action="/enrol/index.php" method="get">
+                <input type="hidden" name="id" value="<?= $enrolid ?>">
+                <input type="hidden" name="action" value="ascoupon">
+                <input id="ascoupon" type="checkbox" name="ascoupon" <?= $ascoupon ?>>
+                <label for="ascoupon"><?= get_string('as-coupon', 'enrol_ildpayone')?></label>
+                <?php global $OUTPUT; echo $OUTPUT->help_icon('as-coupon', 'enrol_ildpayone'); ?>
+            </form>
+        </td>
+        <td colspan="2" class="hidden-xs"></td>
+        <td>
+            <form id="checkout" action="/enrol/index.php" method="get">
+                <input type="hidden" name="id" value="<?= $enrolid ?>">
+                <button class="btn btn-success btn-block" name="action" value="checkout"
+                        type="submit"><?= get_string('goto-checkout', 'enrol_ildpayone')?></button>
+            </form>
+        </td>
+    </tr>
+    </tfoot>
+</table>

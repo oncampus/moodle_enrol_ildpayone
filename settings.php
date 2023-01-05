@@ -60,4 +60,6 @@ if ($ADMIN->fulltree) {
         ENROL_EXT_REMOVED_UNENROL => get_string('extremovedunenrol', 'enrol'),
     );
     $settings->add(new admin_setting_configselect('enrol_ildpayone/expiredaction', get_string('expiredaction', 'enrol_ildpayone'), get_string('expiredaction_help', 'enrol_ildpayone'), ENROL_EXT_REMOVED_UNENROL, $options));
+    $settings->add(new admin_setting_configtext('enrol_ildpayone/vat', get_string('vat_value', 'enrol_ildpayone'), '', '19', PARAM_INT));
+    $settings->add(new admin_setting_configtext('enrol_ildpayone/testuser', get_string('testuser', 'enrol_ildpayone'), '', '', PARAM_RAW));
 }

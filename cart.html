@@ -1,0 +1,47 @@
+<div id="page-enrolsiteheader" class="row">
+    <div class="enrolsiteheader col-xs-12 col-sm-9 col-md-9">
+        <h1 class="enrolsiteheadertitel"><?= get_string('cart', 'enrol_ildpayone')?></h1>
+        <?php
+            if(!empty($products) && !empty($zfu)) {
+                echo get_string('cart-additional', 'enrol_ildpayone');
+            } else if(empty($products) && !empty($zfu)) {
+                echo get_string('cart-additional-zfu', 'enrol_ildpayone');
+            } else if(!empty($products) && empty($zfu)){
+                echo get_string('cart-additional-products', 'enrol_ildpayone');
+            }
+        ?>
+    </div>
+    <div class="enrolimage col-xs-12 col-sm-3 col-md-3">
+        <div class="ocproduct-overview-img overview-enrol"></div>
+    </div>
+</div>
+<div class="clearfix">
+</div>
+
+<div class="ocshopinglist">
+    <?php if(!empty($products)) {include($CFG->dirroot . '/enrol/ildpayone/cart_products.html');} ?>
+    <?php if(!empty($zfu)) {include($CFG->dirroot . '/enrol/ildpayone/cart_zfu.html');} ?>
+
+    <table class="cart">
+        <tfoot>
+        <tr>
+            <td style="width:100%">
+                <form action="/enrol/index.php" method="get">
+                    <input type="hidden" name="id" value="<?= $enrolid ?>">
+                    <?= get_string('coupon', 'enrol_ildpayone')?>
+                    <input type="text" name="coupon">
+                    <button class="btn btn-info" name="action" value="coupon" type="submit"><i
+                            class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </form>
+            </td>
+            <td colspan="3" class="hidden-xs"></td>
+            <td>
+                <a href="/Kursangebot" class="btn btn-warning"><i
+                        class="glyphicon glyphicon-shopping-cart shoping-icon"></i> <?= get_string('continue-shopping', 'enrol_ildpayone')?>
+                </a>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

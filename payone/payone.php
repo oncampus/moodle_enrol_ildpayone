@@ -92,6 +92,8 @@ class Payone {
      * payone constructor.
      */
     public function __construct() {
+        global $USER;
+
         $this->frontendUrl = get_config('enrol_ildpayone', 'frontend_url');
         $this->portalKey = get_config('enrol_ildpayone', 'portalkey');
         $this->data['portalid'] = get_config('enrol_ildpayone', 'portalid');
@@ -99,6 +101,13 @@ class Payone {
         $this->data['aid'] = get_config('enrol_ildpayone', 'aid');
         $this->data['api_version'] = get_config('enrol_ildpayone', 'api_version');
         $this->data['mode'] = get_config('enrol_ildpayone', 'mode');
+        $testusers = explode(',', get_config('enrol_ildpayone', 'testuser'));
+        foreach($testusers as $testuser){
+            if($testuser == $USER->id){
+                $this->data['mode'] = 'test';
+                break;
+            }
+        }
         $this->data['request'] = 'authorization';
         $this->data['encoding'] = 'UTF-8';
         $this->data['amount'] = 0;
@@ -113,17 +122,18 @@ class Payone {
      * @param $desc
      * @param $tax
      */
-    public function addItem($itemnr, $price, $quantity, $desc, $tax) {
-        $price = (int)((float)$price * 100);
+    public function addItem($itemtype, $itemnr, $price, $quantity, $desc, $tax) {
+        $price = round(($price * 100.00), 0);
         $counter = $this->items;
 
+        $this->data['it'][$counter] = $itemtype;
         $this->data['id'][$counter] = $itemnr;
         $this->data['pr'][$counter] = $price;
         $this->data['no'][$counter] = $quantity;
         $this->data['de'][$counter] = $desc;
         $this->data['va'][$counter] = $tax;
 
-        $this->data['amount'] += $price;
+        $this->data['amount'] += $price * $quantity;
         $this->items++;
     }
 
@@ -194,6 +204,6 @@ class Payone {
         $url .= http_build_query($this->data);
         $url .= '&hash=' . $hash;
 
-        return $url;
+        return utf8_encode($url);
     }
 }

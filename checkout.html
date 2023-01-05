@@ -1,0 +1,56 @@
+<div id="page-enrolsiteheader" class="row">
+   <div class="enrolsiteheader col-xs-12 col-sm-9 col-md-9">
+   		<h1 class="enrolsiteheadertitel">Kasse</h1>
+   </div>
+   <div class="enrolimage col-xs-12 col-sm-3 col-md-3">
+	    <div class="ocproduct-overview-img overview-enrol"></div>
+   </div>
+</div>
+<div class="clearfix">
+</div>
+<div>
+    <br/>
+    <p><b>Teilnahmebedingung und Widerrufsbelehrung</b></p>
+    <p id="agb-accepted">
+        <input id="agb-checkbox" type="checkbox" name="accepted">Ich habe die <a
+            href="https://www.oncampus.de/teilnahmebedingungen" target="_blank"><b>Teilnahmebedingungen</b></a>
+        sowie
+        <a
+                href="https://www.oncampus.de/widerrufsbelehrung"
+                target="_blank"><b>Widerrufsbelehrung</b></a> gelesen und bin mit deren Geltung
+        einverstanden.</p>
+</div>
+
+<div class="accordion">
+    <?php foreach($payments as $type => $link):?>
+    <div class="accordion-section">
+        <a class="accordion-section-title"
+           href="#<?= $type;?>"><?= get_string($type, 'enrol_ildpayone') . $logos[$type];?></a>
+        <div id="<?= $type;?>" class="accordion-section-content">
+            <iframe src="<?= $link;?>" width="100%" height="<?= $iframe_height[$type];?>" frameborder="0"></iframe>
+        </div>
+    </div>
+    <?php endforeach;?>
+</div>
+<br>
+
+<div>
+    <div style="float: left">
+        <p class="anbieter"><b>Anbieter:</b><br>
+            oncampus GmbH<br>
+            Mönkhofer Weg 239<br>
+            23562 Lübeck<br>
+            Deutschland<br><br>
+            Tel.: +49 (0)451 160818-17<br>
+            Fax: +49 (0)451 160818-98<br>
+            E-Mail: info@oncampus.de</p>
+    </div>
+    <div style="float: right">
+        <a href="https://pci.usd.de/compliance/6370-717C-E5A9-FCFA-E6D7-597D/details_de.html" target="_blank"
+           onclick="window.open(this.href, '', 'width = 600, height = 615, left = 100, top = 200'); return false;"><img
+                src="https://pci.usd.de/compliance/6370-717C-E5A9-FCFA-E6D7-597D/seal.png"/></a>
+    </div>
+    <div style="clear:both"></div>
+</div>
+
+<?= $ga_tracking;?>

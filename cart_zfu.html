@@ -1,0 +1,119 @@
+<h2><?= get_string('inquiry', 'enrol_ildpayone')?></h2>
+
+<table class="cart table table-hover table-condensed">
+    <thead>
+    <tr>
+        <th colspan="3" style="width:68%"><?= get_string('product', 'enrol_ildpayone')?></th>
+        <th style="width:22%" class="text-center"><?= get_string('netto', 'enrol_ildpayone')?></th>
+        <th style="width:10%"></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <?php foreach($zfu as $id => $zfu):?>
+    <tr>
+        <td colspan="3" data-th="<?= get_string('product', 'enrol_ildpayone')?>">
+            <div class="row">
+                <div class="col-sm-2 hidden-xs"><img src="<?= $zfu->get_thumbnail() ?>"
+                                                     alt="<?= $zfu->get_title() ?>"
+                                                     class="img-responsive"/></div>
+                <span class="col-sm-10">
+                        <a href="/blocks/ocproducts/product.php?id=<?= $id ?>"><h4 class="nomargin"><?= $zfu->
+                            get_title() ?></h4></a>
+                    <?php
+                        if($zfu->has_discount()) {
+                            $zfu_discount = $zfu->get_discount();
+                            echo '<span
+                        class="redeemed-code"><strong>' . get_string('code', 'enrol_ildpayone') . '</strong>' . get_string('redeemed-coupon', 'enrol_ildpayone', array('code' => $zfu_discount->code, 'discount' => $zfu_discount->discountValue . '%')) . '</span><br/>';
+                        }
+
+                        if($zfu->has_graduation_discount()) {
+                            $zfu_graduation_discount = $zfu->get_graduation_discount();
+                            echo '<span class="graduation-price"><strong>' . get_string('graduation-price', 'enrol_ildpayone', array('conditionValue' => $zfu_graduation_discount->discountConditions[0]->conditionValue, 'discountValue' => $zfu_graduation_discount->discountValue)) . '</strong></span>';
+                        }
+                    ?>
+                    </span>
+            </div>
+        </td>
+        <td data-th="<?= get_string('netto', 'enrol_ildpayone')?>" class="text-center">
+            <?php
+                    if($zfu->has_discount()){
+            echo '<span class="old-price">EUR ' . number_format($zfu->get_original_price() * $zfu->get_quantity(), 2, ',', '.') . '</span>
+            <br/>';
+            echo '<span
+                class="new-price">EUR ' . number_format($zfu->get_price() * $zfu->get_quantity(), 2, ',', '.') . '</span>';
+            } else {
+            echo 'EUR ' . number_format($zfu->get_price() * $zfu->get_quantity(), 2, ',', '.');
+            }
+            ?>
+        </td>
+        <td class="actions" data-th="">
+            <form action="/enrol/index.php" method="get">
+                <input type="hidden" name="id" value="<?= $zfu->get_courseid() ?>">
+                <input type="hidden" name="product" value="<?= $id ?>">
+                <button class="btn btn-block" name="action" value="remove" type="submit"><i
+                        class="fa fa-trash"></i>
+                </button>
+            </form>
+        </td>
+    </tr>
+
+    <?php endforeach;?>
+
+    </tbody>
+    <tfoot>
+    <tr class="visible-xs">
+        <td class="text-center"><strong>EUR <?= number_format($zfu_total, 2, ',', '.') ?></strong></td>
+    </tr>
+    <tr>
+        <td class="hidden-xs" colspan="5"></td>
+    </tr>
+    <tr class="hidden-xs">
+        <td colspan="2">
+            <?php
+                if(!empty($zfu_abs_discount)) {
+                echo '<span class="redeemed-code"><strong>' . get_string('code', 'enrol_ildpayone') . '</strong>' .
+            get_string('redeemed-coupon', 'enrol_ildpayone', array('code' => $zfu_abs_discount->code, 'discount' =>
+            $zfu_abs_discount->discountValue . 'EUR')) . '</span>';
+            }
+            ?>
+        </td>
+        <td class="text-right"><strong><?= get_string('total', 'enrol_ildpayone')?></strong></td>
+        <td class="text-center"><strong>EUR
+            <?php
+                if(!empty($zfu_abs_discount)) {
+                    echo '<span class="old-price">EUR ' . number_format($zfu_total, 2, ',', '.') . '</span>
+            <br/>';
+            echo '<span class="new-price">EUR ' . number_format($cart_zfu_total, 2, ',', '.')  . '</span>';
+            } else {
+            echo number_format($zfu_total, 2, ',', '.');
+            }
+            ?></strong></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="4" class="hidden-xs"></td>
+        <td>
+            <?php
+                if($zfu_total == 0) {
+                $hash = hash_hmac("sha384", $USER->id . $cart_id, get_config('enrol_ildpayone', 'portalkey'));
+                    echo '<form action="/enrol/ildpayone/success.php" method="post">
+            <input type="hidden" name="user" value="' . $USER->id . '">
+            <input type="hidden" name="hash" value="' . $hash . '">
+            <input type="hidden" name="zfu" value="1">
+            <button class="btn btn-success btn-block" name="action" value="enrol"
+                    type="submit">' . get_string('shopping-action-enrol-for-free', 'block_ocproducts') . '</button>
+            </form>';
+                } else {
+                    echo '<form action="/enrol/ildpayone/inquiry.php" method="post">
+            <input type="hidden" name="cartid" value="' . $cart_id . '">
+            <button class="btn btn-success btn-block" name="action" value="inquiry"
+                    type="submit">' . get_string('goto-inquiry', 'enrol_ildpayone') . '</button>
+        </form>';
+                }
+            ?>
+
+        </td>
+    </tr>
+    </tfoot>
+</table>
