@@ -42,8 +42,6 @@ if (empty($cartid) || $cartid != $cart->get_id()) {
     redirect(new moodle_url('/'));
 }
 
-$PAGE->https_required();
-
 $PAGE->set_url('/enrol/ildpayone/inquiry.php');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('incourse');
