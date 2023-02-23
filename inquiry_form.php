@@ -38,7 +38,7 @@ class ildpayone_inquiry_form extends moodleform {
 
         $mform->addElement('html', '<h3>Ihre persönlichen Daten</h3>');
 
-        $salutation = array('Herr' => 'Herr', 'Frau' => 'Frau');
+        $salutation = array('Herr' => 'Herr', 'Frau' => 'Frau', 'keine Angabe' => 'keine Angabe');
         $mform->addElement('select', 'salutation', get_string('salutation', 'enrol_ildpayone'), $salutation);
         $mform->addRule('salutation', get_string('required'), 'required', null, 'client');
 
