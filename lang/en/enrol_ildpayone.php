@@ -99,6 +99,8 @@ $string['birth-city'] = 'Place of birth';
 
 $string['company'] = 'Company';
 $string['invoice'] = 'Different billing address';
+$string['invoice_email'] = 'E-mail address (if different)';
+$string['invoice_email_prompt'] = 'E-mail address to send the invoice to. If not set, the invoice will be sent to the address defined in the user\'s profile.';
 
 $string['send-requests'] = 'Inquiry/Free Access Anfragen an Moodalis';
 

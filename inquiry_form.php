@@ -67,9 +67,9 @@ class ildpayone_inquiry_form extends moodleform {
             $mform->setDefault('zip', $USER->profile_field_zipcode);
         }
 
-        $country = get_string_manager()->get_list_of_countries();
+        $country             = get_string_manager()->get_list_of_countries();
         $default_country[''] = get_string('selectacountry');
-        $country = array_merge($default_country, $country);
+        $country             = array_merge($default_country, $country);
         $mform->addElement('select', 'country', get_string('country'), $country);
         $mform->addRule('country', get_string('required'), 'required', null, 'client');
         if (!empty($USER->country)) {
@@ -104,6 +104,11 @@ class ildpayone_inquiry_form extends moodleform {
         $mform->setType('invoice_company', PARAM_TEXT);
         $mform->disabledIf('invoice_company', 'invoice');
 
+        $mform->addElement('text', 'invoice_email', get_string('email', 'enrol_ildpayone'));
+        $mform->setType('invoice_email', PARAM_TEXT);
+        $mform->addRule('invoice_email', get_string('invoice_email_prompt', 'enrol_ildpayone'), 'email');
+        $mform->disabledIf('invoice_email', 'invoice');
+
         foreach ($namefields as $field) {
             $mform->addElement('text', 'invoice_' . $field, get_string($field), 'maxlength="100" size="30"');
             $mform->setType('invoice_' . $field, core_user::get_property_type('firstname'));
@@ -114,9 +119,13 @@ class ildpayone_inquiry_form extends moodleform {
         $mform->setType('invoice_zip', PARAM_INT);
         $mform->disabledIf('invoice_zip', 'invoice');
 
-        $country = get_string_manager()->get_list_of_countries();
+        $mform->addElement('text', 'invoice_order_number', get_string('order_number', 'enrol_ildpayone'), 'maxlength="6" size="6"');
+        $mform->setType('invoice_order_number', PARAM_TEXT);
+        $mform->disabledIf('invoice_order_number', 'invoice');
+
+        $country             = get_string_manager()->get_list_of_countries();
         $default_country[''] = get_string('selectacountry');
-        $country = array_merge($default_country, $country);
+        $country             = array_merge($default_country, $country);
         $mform->addElement('select', 'invoice_country', get_string('country'), $country);
         $mform->disabledIf('invoice_country', 'invoice');
 
@@ -125,7 +134,7 @@ class ildpayone_inquiry_form extends moodleform {
 
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
-        
+
         /*
         if (!preg_match('(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d
 ', $data['birthday'])) {

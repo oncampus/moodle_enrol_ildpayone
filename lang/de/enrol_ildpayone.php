@@ -94,6 +94,8 @@ $string['birthday'] = 'Geburtstag';
 $string['birth-city'] = 'Geburtsort';
 $string['company'] = 'Firma';
 $string['invoice'] = 'Abweichende Rechnungsinformationen';
+$string['invoice_email'] = 'E-mail Adresse (wenn abweichend)';
+$string['invoice_email_prompt'] = 'E-mail Adresse für den Rechnungsversand. Wenn nicht gesetztwird die Rechnung an die im Nutzerprofil gespeicherte Adresse versandt.';
 
 $string['send-requests'] = 'Inquiry/Free Access Anfragen an Moodalis';
 
