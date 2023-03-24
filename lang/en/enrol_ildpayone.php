@@ -102,6 +102,8 @@ $string['invoice'] = 'Different billing address';
 $string['invoice_email'] = 'E-mail address (if different)';
 $string['invoice_email_prompt'] = 'E-mail address to send the invoice to. If not set, the invoice will be sent to the address defined in the user\'s profile.';
 
+$string['order_number'] = 'Order Number (optional)';
+
 $string['send-requests'] = 'Inquiry/Free Access Anfragen an Moodalis';
 
 $string['free-access'] = 'Vielen Dank für deine Buchung bei oncampus. Du hast den 100 % Rabatt für unsere Integrations-Kurse erfolgreich eingelöst. Du kannst gleich in den Kurs gehen oder noch weiter in unserem Angebot stöbern.';

@@ -104,7 +104,7 @@ class ildpayone_inquiry_form extends moodleform {
         $mform->setType('invoice_company', PARAM_TEXT);
         $mform->disabledIf('invoice_company', 'invoice');
 
-        $mform->addElement('text', 'invoice_email', get_string('email', 'enrol_ildpayone'));
+        $mform->addElement('text', 'invoice_email', get_string('invoice_email', 'enrol_ildpayone'));
         $mform->setType('invoice_email', PARAM_TEXT);
         $mform->addRule('invoice_email', get_string('invoice_email_prompt', 'enrol_ildpayone'), 'email');
         $mform->disabledIf('invoice_email', 'invoice');

@@ -97,6 +97,8 @@ $string['invoice'] = 'Abweichende Rechnungsinformationen';
 $string['invoice_email'] = 'E-mail Adresse (wenn abweichend)';
 $string['invoice_email_prompt'] = 'E-mail Adresse für den Rechnungsversand. Wenn nicht gesetztwird die Rechnung an die im Nutzerprofil gespeicherte Adresse versandt.';
 
+$string['order_number'] = 'Auftragsnummer (optional)';
+
 $string['send-requests'] = 'Inquiry/Free Access Anfragen an Moodalis';
 
 $string['free-access'] = 'Vielen Dank für deine Buchung bei oncampus. Du hast den 100%-Rabatt für diesen Kurs erfolgreich eingelöst. Du kannst gleich in den Kurs gehen oder noch weiter in unserem Angebot stöbern.';
