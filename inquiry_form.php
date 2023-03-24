@@ -119,7 +119,7 @@ class ildpayone_inquiry_form extends moodleform {
         $mform->setType('invoice_zip', PARAM_INT);
         $mform->disabledIf('invoice_zip', 'invoice');
 
-        $mform->addElement('text', 'invoice_order_number', get_string('order_number', 'enrol_ildpayone'), 'maxlength="6" size="6"');
+        $mform->addElement('text', 'invoice_order_number', get_string('order_number', 'enrol_ildpayone'));
         $mform->setType('invoice_order_number', PARAM_TEXT);
         $mform->disabledIf('invoice_order_number', 'invoice');
 
